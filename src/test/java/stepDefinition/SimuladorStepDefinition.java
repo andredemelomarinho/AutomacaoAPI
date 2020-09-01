@@ -1,0 +1,214 @@
+package stepDefinition;
+
+import java.beans.IntrospectionException;
+import java.beans.PropertyDescriptor;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.util.List;
+
+import automation.Pages;
+import automation.utils.TestData;
+import cucumber.api.java.en.And;
+import cucumber.api.java.en.Given;
+import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
+import service.RequisicaoAPI;
+import session.ThreadManager;
+import com.cucumber.listener.Reporter;
+
+public class SimuladorStepDefinition {
+	RequisicaoAPI req = new RequisicaoAPI();
+	private Pages getPages() {
+		return ThreadManager.getSession().getPages();
+	}
+	String cpf="";
+	Integer id=0;
+	
+
+	//-----------------------Star definition here-------------------------//
+
+@Given("^altero propriedade dto \"([^\"]*)\" \"([^\"]*)\"$")
+public void altero_propriedade_dto(String nomePropriedade, Object valor) throws Throwable {
+	Object prop;
+	try {
+		TestData dto = ThreadManager.getSession().getCurrentDTO();
+		PropertyDescriptor descriptor = new PropertyDescriptor(
+				dto.getClass().getDeclaredField(nomePropriedade).getName(),
+				dto.getClass());
+		prop = descriptor.getReadMethod().invoke(dto);
+		Object val = null;
+		if(prop != null) {
+			val = returnValueByType(prop.getClass(), valor);
+		}
+		setField(dto, nomePropriedade, val);
+	} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchFieldException
+			| SecurityException | IntrospectionException e1) {
+		// TODO Auto-generated catch block
+		e1.printStackTrace();
+	}
+
+}
+	@Given("^valido endpoint restricoes$")
+	public void valido_endpoint_restricoes() throws Throwable {
+		req.valida_endpoint_restricao();
+
+	}
+
+	@When("^envia request para api com cpf \"([^\"]*)\"$")
+	public String envia_request_para_api_com_cpf(String cpfRestricao) throws Throwable {
+		req.consultarRestricao();
+		cpf =cpfRestricao;
+		String body =req.getRestricaoByCPF(cpf);
+		Reporter.addStepLog("Reponse:" +body);
+		return body;
+	}
+	@Given("^envia request para api com cpf$")
+	public void envia_request_para_api_com_cpf() throws Throwable {
+		req.consultarRestricao();
+	}
+
+	@Then("^Valida se o cpf tem restricao$")
+	public void valida_se_o_cpf_tem_restricao() throws Throwable {
+		String mensagem =envia_request_para_api_com_cpf(cpf);
+		req.validaRestricaoCpf(mensagem);
+
+	}
+
+	@Given("^realiza uma simulacao valida$")
+	public void realiza_uma_simulacao_valida() throws Throwable {
+		req.postSimualacaoDadosValidos();
+	}
+
+	@Then("^valida a simulacao realizada$")
+	public void valida_a_simulacao_realizada() throws Throwable {
+		req.validaUltmimaSimulacao();
+
+	}
+	@Given("^consulta cpf simulado$")
+	public void consulta_cpf_simulado() throws Throwable {
+		 cpf =req.getCPFSimulacao();
+
+	}
+
+	@When("^realiza uma simulacao com cpf existente$")
+	public void realiza_uma_simulacao_com_cpf_existente() throws Throwable {
+		req.realiza_uma_simulacao_com_cpf_existente(cpf);
+	}
+
+	@When("^realiza uma simulacao com cpf incorreto \"([^\"]*)\"$")
+	public void realiza_uma_simulacao_com_cpf_incorreto(String cpf) throws Throwable {
+		req.postSimualacaoCpfIncorreto(cpf);
+	}
+	@Given("^monta request para consulta$")
+	public void monta_request_para_consulta() throws Throwable {
+		// Write code here that turns the phrase above into concrete actions
+
+	}
+
+	@When("^envia o request para consulta$")
+	public List<String> envia_o_request_para_consulta() throws Throwable {
+		List<String> simulacoes =req.getListSimulacao();
+		//Reporter.addStepLog(simulacoes);
+		return simulacoes;
+	}
+
+	@Then("^conta quantidade de dados retornados$")
+	public void conta_quantidade_de_dados_retornados() throws Throwable {
+		List<String> qtdSimulacoes =envia_o_request_para_consulta();
+		req.getQuantidadeSimulacoes(qtdSimulacoes);
+	}
+	@Given("^envia o request para consulta com \"([^\"]*)\"$")
+	public void envia_o_request_para_consulta_com(String cpf) throws Throwable {
+		req.getSimulacaoByCPF(cpf);
+	}
+	@Then("^valida a simulacao realizada com \"([^\"]*)\"$")
+	public void valida_a_simulacao_realizada_com(String cpf) throws Throwable {
+		req.validaSimulacaoByCPF(cpf);
+
+	}
+	@Given("^encontra um id de simulacao cadastrada$")
+	public Integer encontra_um_id_de_simulacao_cadastrada() throws Throwable {
+		Integer id =req.getIdSimulacao();
+		return id;
+	}
+
+	@When("^envia request para o delete$")
+	public void envia_request_para_o_delete() throws Throwable {
+         id =encontra_um_id_de_simulacao_cadastrada();
+		req.deleteUserTest(id);
+	}
+
+	@Then("^valida se o id foi deletado$")
+	public void valida_se_o_id_foi_deletado() throws Throwable {
+		req.confirmIdDeletado(id);
+	}
+	@Given("^envia request para o delete (\\d+)$")
+	public void envia_request_para_o_delete(int id) throws Throwable {
+		req.deleteUserTest(id);
+	}
+	@Given("^consulta cpf informado \"([^\"]*)\"$")
+	public String consulta_cpf_informado(String cpfUser) throws Throwable {
+		cpf =req.getSimulacaoByCPF(cpfUser);
+		return cpf;
+	}
+	@When("^update_registro_api \"([^\"]*)\"$")
+	public void update_registro_api(String nome) throws Throwable {
+		req.putUserTest(nome,cpf);
+
+	}
+	@Then("^valida update realizado \"([^\"]*)\"$")
+	public void valida_update_realizado(String nome) throws Throwable {
+		req.confirmCpfUpdated(nome,cpf);
+	}
+
+	//-----------------------End definition here------------------------//
+	private Object returnValueByType(Class<?> propertyType, Object valor) {
+
+		Object val = null;
+		switch (propertyType.getTypeName()) {
+			case "java.lang.String":
+				val = String.valueOf(valor);
+				break;
+			case "java.lang.Boolean":
+				val = Boolean.parseBoolean(valor.toString());
+				break;
+			case "java.lang.Long":
+				val = Long.parseLong(valor.toString());
+				break;
+			case "java.lang.Integer":
+				val = Integer.parseInt(valor.toString());
+				break;
+
+		}
+
+		return val;
+	}
+	public static boolean setField(Object targetObject, String fieldName, Object fieldValue) {
+		Field field;
+		try {
+			field = targetObject.getClass().getDeclaredField(fieldName);
+		} catch (NoSuchFieldException e) {
+			field = null;
+		}
+		Class superClass = targetObject.getClass().getSuperclass();
+		while (field == null && superClass != null) {
+			try {
+				field = superClass.getDeclaredField(fieldName);
+			} catch (NoSuchFieldException e) {
+				superClass = superClass.getSuperclass();
+			}
+		}
+		if (field == null) {
+			return false;
+		}
+		field.setAccessible(true);
+		try {
+			field.set(targetObject, fieldValue);
+			return true;
+		} catch (IllegalAccessException e) {
+			return false;
+		}
+	}
+
+
+}
