@@ -2,8 +2,10 @@
  
 O Desafio foi realizado com JAVA, RestAssured, Cucumber e BDD.
 Os resultados de teste estão na pasta output, no arquivo report.html
+A classe que executa os testes está na pasta test\java\cucumberTest\TestRunner
 
 Algumas observações encontradas na exexução de testes:
+
 1-Conforme o documento de especificação da API ao tentar incluir uma simulação com um cpf existente deveria ser retornado:
  o status code: 409 e mensagem:"CPF já existente" 
  Porém para esse teste encontrou um defeito na documentação, pois o retorno é status code 400 e mensagem: {"mensagem":"CPF duplicado"}
