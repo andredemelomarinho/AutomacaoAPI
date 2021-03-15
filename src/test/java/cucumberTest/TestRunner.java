@@ -21,7 +21,7 @@ import automation.utils.*;
 	monochrome = false,
 	glue = { "stepDefinition" },
 	plugin = { "pretty", "com.cucumber.listener.ExtentCucumberFormatter:output/report.html"},
-	tags = { "@validacaoAplicacao" }
+	tags = { "@testeAPIPUT" }
 )
 
 public class TestRunner {

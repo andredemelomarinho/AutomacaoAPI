@@ -1,14 +1,22 @@
 package dto;
 
+import java.util.Date;
+
 public class UsuariosDTO {
 
+    public String getId() {
+        return id;
+    }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String id;
     public String nome;
     public String cpf;
-    public String email;
-    public double valor;
-    public int parcelas;
-    public boolean seguro;
+    public String createdAt;
+
 
     public String getNome() {
         return nome;
@@ -26,37 +34,15 @@ public class UsuariosDTO {
         this.cpf = cpf;
     }
 
-    public String getEmail() {
-        return email;
+    public String getCreatedAt() {
+        return createdAt;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
     }
 
-    public double getValor() {
-        return valor;
-    }
 
-    public void setValor(double valor) {
-        this.valor = valor;
-    }
-
-    public int getParcela() {
-        return parcelas;
-    }
-
-    public void setParcela(int parcela) {
-        this.parcelas = parcela;
-    }
-
-    public boolean isSeguro() {
-        return seguro;
-    }
-
-    public void setSeguro(boolean seguro) {
-        this.seguro = seguro;
-    }
 
 
 

@@ -3,6 +3,8 @@ package dto.baseDTO;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 import dto.UsuariosDTO;
 import org.apache.commons.lang.RandomStringUtils;
@@ -17,11 +19,8 @@ public class SimuladorDTOBase {
 	public  UsuariosDTO getSimuladorBaseRealizado() {
 		UsuariosDTO simulador = new UsuariosDTO();
 		simulador.setCpf("00788639022");
-		simulador.setEmail("andretestesicredi@gmail.com");
+		simulador.setCreatedAt("14/03/2021");
 		simulador.setNome("Andre Marinho");
-		simulador.setParcela(10);
-		simulador.setValor(25000);
-		simulador.setSeguro(false);
 		return simulador;
 	}
 	
