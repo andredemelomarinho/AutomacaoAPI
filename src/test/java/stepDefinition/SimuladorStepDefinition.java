@@ -242,6 +242,11 @@ public void altero_propriedade_dto(String nomePropriedade, Object valor) throws 
 		req.putUserTest(endpoint,id);
 
 	}
+	@Then("^valida registro existente \"([^\"]*)\" \"([^\"]*)\"$")
+	public void valida_nome_criado(String campo,String valor) throws Throwable {
+		req.validaRespostaApi(campo, valor);
+
+	}
 	@And("^update_registro_api_dataprovider \"([^\"]*)\" \"([^\"]*)\"$")
 	public void update_registro_api_dataprovider(String endpoint, String plan) throws Throwable {
 		//req.putUserFromDataProvider(endpoint,plan);

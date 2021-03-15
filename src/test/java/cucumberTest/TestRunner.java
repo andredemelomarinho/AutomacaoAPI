@@ -21,7 +21,7 @@ import automation.utils.*;
 	monochrome = false,
 	glue = { "stepDefinition" },
 	plugin = { "pretty", "com.cucumber.listener.ExtentCucumberFormatter:output/report.html"},
-	tags = { "@testeAPIPUT" }
+	tags = { "@validarSubmit" }
 )
 
 public class TestRunner {
@@ -32,10 +32,6 @@ public class TestRunner {
 			Reporter.assignAuthor("André");
 
 		}
-
-
-
-	
 	@BeforeClass
 	public static void testStarts() throws   InstantiationException, IllegalAccessException {
 		ArquivoUtils.deleteFilesArquivos();

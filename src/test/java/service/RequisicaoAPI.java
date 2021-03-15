@@ -32,8 +32,9 @@ public class RequisicaoAPI {
 
 
 	private String url ="https://604e13942a808e00177848a8.mockapi.io/api/cadastrar/";
-
-	public static Map<String, String> map = new HashMap<String, String>();
+	 String respostaId;
+	 String respostaNome;
+     String endpoint ="pessoa";
 	 CommonMethods cm = new CommonMethods();
 
 	 //TALK API COM RESTASSURED\\
@@ -47,14 +48,21 @@ try {
 					.then()
 					//.statusCode(200)
 					.extract().
-					path("id");
+					path(field);
 	return responseString;
 }catch (Exception ex ){
 	return null;
 }
-
+}
+	public void validaRespostaApi(String campo, String valor){
+		if(respostaId==null){
+			respostaId =valor;
+		}
+		String resposta= getField(respostaId,endpoint,campo);
+		assertEquals(valor, resposta);
 	}
-	public void  postUserTest(String endpoint , String nome){
+
+	public String  postUserTest(String endpoint , String nome){
 		//RestAssured Test\\
        /*
 		SimuladorDTOBase baseDto = new SimuladorDTOBase();
@@ -73,7 +81,7 @@ try {
 
 		SimuladorDTOBase baseDto = new SimuladorDTOBase();
 		UsuariosDTO dados =baseDto.getSimuladorBaseRealizado();
-		dados.setNome("Juviana Marinho");
+		dados.setNome(nome);
 		JsonPath retorno = given()
 				.header("Accept", "application/json")
 				.contentType("application/json")
@@ -87,11 +95,14 @@ try {
 				.jsonPath();
 
 		Reporter.addStepLog("Reponse:" +retorno.prettyPrint());
-		String resposta = retorno.getJsonObject("nome");
-		assertEquals(dados.nome, resposta);
+		respostaNome = retorno.getJsonObject("nome");
+		respostaId = retorno.getJsonObject("id");
+		System.out.println("id "+respostaId+ " - nome "+respostaNome);
 
+		return respostaId;
 
 	}
+
 	public void putUserTest(String endpoint,String id){
 
 		String idUser= getField(id,endpoint,"id");
@@ -104,13 +115,15 @@ try {
 		UsuariosDTO dados =baseDto.getSimuladorBaseRealizado();
 		JSONObject requestParams = new JSONObject();
 		RequestSpecification request = given();
-		dados.setNome("André de Melo Marinho");
+		dados.setNome("André Marinho");
 		requestParams.put("nome", dados.nome);
 		requestParams.put("cpf", dados.cpf);
 		requestParams.put("createdAt", dados.createdAt);
 		request.header("Content-Type", "application/json");
 		request.body(requestParams.toString());
 		Response response  = request.put(url+endpoint+"/"+id);
+		respostaNome= response.path("nome");
+		respostaId= response.path("id");
 		Reporter.addStepLog(response.prettyPrint());
 
 
