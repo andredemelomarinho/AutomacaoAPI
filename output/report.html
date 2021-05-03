@@ -48,7 +48,7 @@
 		<ul id='nav-mobile' class='right hide-on-med-and-down nav-right'>
 			<li>
                 <a href='#!'>
-                    <span class='label suite-start-time blue darken-3'>Mar 15, 2021 05:54:40 PM</span>
+                    <span class='label suite-start-time blue darken-3'>Mar 16, 2021 07:51:52 PM</span>
 				</a>
 			</li>
 			<li>
@@ -86,8 +86,8 @@
 					<i class='material-icons'>local_offer</i> Category
 				</a>
 				<ul id='category-toggle' class='dropdown-content'>
-					<li><a href='#'>@preencherformulario</a></li>
-					<li><a href='#'>@validarSubmit</a></li>
+					<li><a href='#'>@validacaoAplicacao</a></li>
+					<li><a href='#'>@testeAPIGet</a></li>
 					<li class='divider'></li>
 					<li class='clear'><a href='#!' clear='true'>Clear Filters</a></li>
 				</ul>
@@ -165,7 +165,7 @@
 					<canvas id='grandchild-analysis' width='100' height='80'></canvas>
 				</div>
 				<div class='block text-small'>
-					<span class='tooltipped' data-position='top' data-tooltip='100%'><span class='strong'>3</span> step(s) passed</span>
+					<span class='tooltipped' data-position='top' data-tooltip='100%'><span class='strong'>2</span> step(s) passed</span>
 				</div>
 				<div class='block text-small'>
 					<span class='strong tooltipped' data-position='top' data-tooltip='0%'>0</span> step(s) failed, <span class='strong tooltipped' data-position='top' data-tooltip='0%'>0</span> others
@@ -184,44 +184,259 @@
 				
 				<li class='test displayed active has-leaf pass' status='pass' bdd='true' test-id='1'>
 					<div class='test-heading'>
-						<span class='test-name'>Preencher o formulário de contato no site datum.inf.br</span>
-						<span class='test-time'>Mar 15, 2021 05:54:40 PM</span>
+						<span class='test-name'>Enviar uma request para a API e validar os métodos de POST, GET, PUT, DELETE</span>
+						<span class='test-time'>Mar 16, 2021 07:51:52 PM</span>
 						<span class='test-status right pass'>pass</span>
 					</div>
 					<div class='test-content hide'>
 <div class='scenario node' test-id='2' status='pass'>
 	<div class='category-list'>
-		<span class='category label white-text'>@preencherformulario</span>
-		<span class='category label white-text'>@validarSubmit</span>
+		<span class='category label white-text'>@validacaoAplicacao</span>
+		<span class='category label white-text'>@testeAPIGet</span>
 	</div>
-	<span class='duration right label'>0h 0m 26s+893ms</span>
+	<span class='duration right label'>0h 0m 4s+335ms</span>
 	<div class='desc'>
 		<b>Scenario</b>
-		<span class="desc-text">Preencher e enviar formulário de pesquisa</span>
+		<span class="desc-text">Enviar uma Requisição para a API retornando todos os dados</span>
 	</div>
 	<ul class='steps'>
 		<li test-id='3' class='node given pass' status='pass'>
 			
 			<b>Given</b>
 			
-			<span class="bdd-step-name">Given acesso site para preencher formulario</span>
+			<span class="bdd-step-name">Given valido_endpoint "pessoa"</span>
 				<div class='pre'>passed</div>
 			
 		</li>
-		<li test-id='4' class='node when pass' status='pass'>
-			
-			<b>When</b>
-			
-			<span class="bdd-step-name">When formulario é preenchido "Dataum Ti"</span>
-				<div class='pre'>passed</div>
-			
-		</li>
-		<li test-id='5' class='node then pass' status='pass'>
+		<li test-id='4' class='node then pass' status='pass'>
 			
 			<b>Then</b>
 			
-			<span class="bdd-step-name">Then valida envio do formulário</span>
-				<div class='pre'>Resultado: Exibindo resultados paraDatum TI</div>
+			<span class="bdd-step-name">Then get pessoas API "pessoa"</span>
+				<div class='pre'>Reponse:[
+    {
+        "id": "1",
+        "createdAt": "createdAt 1",
+        "nome": "nome 1",
+        "cpf": "cpf 1"
+    },
+    {
+        "id": "2",
+        "createdAt": "createdAt 2",
+        "nome": "nome 2",
+        "cpf": "cpf 2"
+    },
+    {
+        "id": "4",
+        "createdAt": "createdAt 4",
+        "nome": "nome 4",
+        "cpf": "cpf 4"
+    },
+    {
+        "id": "5",
+        "createdAt": "14/03/2021",
+        "nome": "André Melo Marinho",
+        "cpf": "00788639022"
+    },
+    {
+        "id": "6",
+        "createdAt": "createdAt 6",
+        "nome": "nome 6",
+        "cpf": "cpf 6"
+    },
+    {
+        "id": "7",
+        "createdAt": "14/03/2021",
+        "nome": "Juviana Camillo Marinho",
+        "cpf": "Juviana Camillo Marinho"
+    },
+    {
+        "id": "8",
+        "createdAt": "createdAt 8",
+        "nome": "nome 8",
+        "cpf": "cpf 8"
+    },
+    {
+        "id": "9",
+        "createdAt": "14/03/2021",
+        "nome": "André Marinho",
+        "cpf": "00788639022"
+    },
+    {
+        "id": "10",
+        "createdAt": "createdAt 10",
+        "nome": "nome 10",
+        "cpf": "cpf 10"
+    },
+    {
+        "id": "11",
+        "createdAt": "createdAt 11",
+        "nome": "nome 11",
+        "cpf": "cpf 11"
+    },
+    {
+        "id": "12",
+        "createdAt": "createdAt 12",
+        "nome": "nome 12",
+        "cpf": "cpf 12"
+    },
+    {
+        "id": "13",
+        "createdAt": "createdAt 13",
+        "nome": "nome 13",
+        "cpf": "cpf 13"
+    },
+    {
+        "id": "14",
+        "createdAt": "createdAt 14",
+        "nome": "nome 14",
+        "cpf": "cpf 14"
+    },
+    {
+        "id": "15",
+        "createdAt": "createdAt 15",
+        "nome": "nome 15",
+        "cpf": "cpf 15"
+    },
+    {
+        "id": "16",
+        "createdAt": "createdAt 16",
+        "nome": "nome 16",
+        "cpf": "cpf 16"
+    },
+    {
+        "id": "17",
+        "createdAt": "createdAt 17",
+        "nome": "nome 17",
+        "cpf": "cpf 17"
+    },
+    {
+        "id": "18",
+        "createdAt": "createdAt 18",
+        "nome": "nome 18",
+        "cpf": "cpf 18"
+    },
+    {
+        "id": "20",
+        "createdAt": "createdAt 20",
+        "nome": "nome 20",
+        "cpf": "cpf 20"
+    },
+    {
+        "id": "21",
+        "createdAt": "createdAt 21",
+        "nome": "nome 21",
+        "cpf": "cpf 21"
+    },
+    {
+        "id": "22",
+        "createdAt": "createdAt 22",
+        "nome": "nome 22",
+        "cpf": "cpf 22"
+    },
+    {
+        "id": "23",
+        "createdAt": "createdAt 23",
+        "nome": "nome 23",
+        "cpf": "cpf 23"
+    },
+    {
+        "id": "24",
+        "createdAt": "createdAt 24",
+        "nome": "nome 24",
+        "cpf": "cpf 24"
+    },
+    {
+        "id": "25",
+        "createdAt": "14/03/2021",
+        "nome": "André de Melo Marinho",
+        "cpf": "00788639022"
+    },
+    {
+        "id": "26",
+        "createdAt": "14/03/2021",
+        "nome": "André de Melo Marinho",
+        "cpf": "00788639022"
+    },
+    {
+        "id": "27",
+        "createdAt": "14/03/2021",
+        "nome": "Juviana Marinho",
+        "cpf": "00788639022"
+    },
+    {
+        "id": "28",
+        "createdAt": "14/03/2021",
+        "nome": "Juviana Marinho",
+        "cpf": "00788639022"
+    },
+    {
+        "id": "29",
+        "createdAt": "14/03/2021",
+        "nome": "Juviana Marinho",
+        "cpf": "00788639022"
+    },
+    {
+        "id": "30",
+        "createdAt": "14/03/2021",
+        "nome": "Juviana Marinho",
+        "cpf": "00788639022"
+    },
+    {
+        "id": "31",
+        "createdAt": "14/03/2021",
+        "nome": "Juviana Marinho",
+        "cpf": "00788639022"
+    },
+    {
+        "id": "32",
+        "createdAt": "14/03/2021",
+        "nome": "Juviana Marinho",
+        "cpf": "00788639022"
+    },
+    {
+        "id": "33",
+        "createdAt": "14/03/2021",
+        "nome": "Juviana Marinho",
+        "cpf": "00788639022"
+    },
+    {
+        "id": "34",
+        "createdAt": "14/03/2021",
+        "nome": "Juviana Marinho",
+        "cpf": "00788639022"
+    },
+    {
+        "id": "35",
+        "createdAt": "14/03/2021",
+        "nome": "Juviana Marinho",
+        "cpf": "00788639022"
+    },
+    {
+        "id": "36",
+        "createdAt": "14/03/2021",
+        "nome": "Juviana Marinho",
+        "cpf": "00788639022"
+    },
+    {
+        "id": "38",
+        "createdAt": "14/03/2021",
+        "nome": "André Marinho",
+        "cpf": "00788639022"
+    },
+    {
+        "id": "39",
+        "createdAt": "14/03/2021",
+        "nome": "André Marinho",
+        "cpf": "00788639022"
+    },
+    {
+        "id": "40",
+        "createdAt": "14/03/2021",
+        "nome": "André Marinho",
+        "cpf": "00788639022"
+    }
+]</div>
 				<div class='pre'>passed</div>
 			
 		</li>
@@ -281,7 +496,7 @@
 				
 				<li class='category displayed active'>
 					<div class='category-heading'>
-						<span class='category-name'>@preencherformulario</span>
+						<span class='category-name'>@validacaoAplicacao</span>
 						<span class='category-status right'>
 							<span class='label pass'>1</span>
 						</span>
@@ -304,8 +519,8 @@
 								</thead>
 								<tbody>
 									<tr>
-										<td>Mar 15, 2021 05:54:40 PM</td>
-										<td class='linked' test-id='2'>Preencher o formulário de contato no site datum.inf.br.Preencher e enviar formulário de pesquisa</td>
+										<td>Mar 16, 2021 07:51:52 PM</td>
+										<td class='linked' test-id='2'>Enviar uma request para a API e validar os métodos de POST, GET, PUT, DELETE.Enviar uma Requisição para a API retornando todos os dados</td>
 										<td><span class='test-status pass'>pass</span></td>
 									</tr>
 								</tbody>
@@ -315,7 +530,7 @@
 				</li>
 				<li class='category displayed active'>
 					<div class='category-heading'>
-						<span class='category-name'>@validarSubmit</span>
+						<span class='category-name'>@testeAPIGet</span>
 						<span class='category-status right'>
 							<span class='label pass'>1</span>
 						</span>
@@ -338,8 +553,8 @@
 								</thead>
 								<tbody>
 									<tr>
-										<td>Mar 15, 2021 05:54:40 PM</td>
-										<td class='linked' test-id='2'>Preencher o formulário de contato no site datum.inf.br.Preencher e enviar formulário de pesquisa</td>
+										<td>Mar 16, 2021 07:51:52 PM</td>
+										<td class='linked' test-id='2'>Enviar uma request para a API e validar os métodos de POST, GET, PUT, DELETE.Enviar uma Requisição para a API retornando todos os dados</td>
 										<td><span class='test-status pass'>pass</span></td>
 									</tr>
 								</tbody>
@@ -408,8 +623,8 @@
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td>Mar 15, 2021 05:54:40 PM</td>
-                                                <td class='linked' test-id='2'>Preencher o formulário de contato no site datum.inf.br.Preencher e enviar formulário de pesquisa</td>
+                                                <td>Mar 16, 2021 07:51:52 PM</td>
+                                                <td class='linked' test-id='2'>Enviar uma request para a API e validar os métodos de POST, GET, PUT, DELETE.Enviar uma Requisição para a API retornando todos os dados</td>
                                                 <td><span class='test-status pass'>pass</span></td>
                                             </tr>
                                         </tbody>
@@ -449,25 +664,25 @@
 			<div class='col s2'>
 				<div class='card-panel r'>
 					Steps
-					<div class='panel-lead'>3</div>
+					<div class='panel-lead'>2</div>
 				</div>
 			</div>
 			<div class='col s2'>
 				<div class='card-panel r'>
 					Start
-					<div class='panel-lead'>Mar 15, 2021 05:54:40 PM</div>
+					<div class='panel-lead'>Mar 16, 2021 07:51:52 PM</div>
 				</div>
 			</div>
 			<div class='col s2'>
 				<div class='card-panel r'>
 			 		End
-			 		<div class='panel-lead'>Mar 15, 2021 05:55:07 PM</div>
+			 		<div class='panel-lead'>Mar 16, 2021 07:51:57 PM</div>
 				</div>
 			</div>
 			<div class='col s2'>
 				<div class='card-panel r'>
 					Time Taken
-					<div class='panel-lead'>26,970ms</div>
+					<div class='panel-lead'>4,457ms</div>
 				</div>
 			</div>
 			<div class='col s4'>
@@ -482,13 +697,13 @@
 							<th>Others</th>
 						</tr>
 						<tr>
-							<td>@preencherformulario</td>
+							<td>@validacaoAplicacao</td>
 							<td>1</td>
 							<td>0</td>
 							<td>0</td>
 						</tr>
 						<tr>
-							<td>@validarSubmit</td>
+							<td>@testeAPIGet</td>
 							<td>1</td>
 							<td>0</td>
 							<td>0</td>
@@ -523,7 +738,7 @@
 				infoChild: 0,
 				exceptionsChild: 0,
 				
-				passGrandChild: 3,
+				passGrandChild: 2,
 				failGrandChild: 0,
 				fatalGrandChild: 0,
 				errorGrandChild: 0,

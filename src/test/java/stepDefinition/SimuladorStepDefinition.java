@@ -27,27 +27,7 @@ public class SimuladorStepDefinition {
 
 	//-----------------------Star definition here-------------------------//
 
-@Given("^altero propriedade dto \"([^\"]*)\" \"([^\"]*)\"$")
-public void altero_propriedade_dto(String nomePropriedade, Object valor) throws Throwable {
-	Object prop;
-	try {
-		TestData dto = ThreadManager.getSession().getCurrentDTO();
-		PropertyDescriptor descriptor = new PropertyDescriptor(
-				dto.getClass().getDeclaredField(nomePropriedade).getName(),
-				dto.getClass());
-		prop = descriptor.getReadMethod().invoke(dto);
-		Object val = null;
-		if(prop != null) {
-			val = returnValueByType(prop.getClass(), valor);
-		}
-		setField(dto, nomePropriedade, val);
-	} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchFieldException
-			| SecurityException | IntrospectionException e1) {
-		// TODO Auto-generated catch block
-		e1.printStackTrace();
-	}
 
-}
 	@Given("^valido endpoint restricoes$")
 	public void valido_endpoint_restricoes() throws Throwable {
 		req.valida_endpoint_restricao();
@@ -162,71 +142,11 @@ public void altero_propriedade_dto(String nomePropriedade, Object valor) throws 
 	}
 
 	//-----------------------End definition here------------------------//
-	private Object returnValueByType(Class<?> propertyType, Object valor) {
 
-		Object val = null;
-		switch (propertyType.getTypeName()) {
-			case "java.lang.String":
-				val = String.valueOf(valor);
-				break;
-			case "java.lang.Boolean":
-				val = Boolean.parseBoolean(valor.toString());
-				break;
-			case "java.lang.Long":
-				val = Long.parseLong(valor.toString());
-				break;
-			case "java.lang.Integer":
-				val = Integer.parseInt(valor.toString());
-				break;
-
-		}
-
-		return val;
-	}
-	public static boolean setField(Object targetObject, String fieldName, Object fieldValue) {
-		Field field;
-		try {
-			field = targetObject.getClass().getDeclaredField(fieldName);
-		} catch (NoSuchFieldException e) {
-			field = null;
-		}
-		Class superClass = targetObject.getClass().getSuperclass();
-		while (field == null && superClass != null) {
-			try {
-				field = superClass.getDeclaredField(fieldName);
-			} catch (NoSuchFieldException e) {
-				superClass = superClass.getSuperclass();
-			}
-		}
-		if (field == null) {
-			return false;
-		}
-		field.setAccessible(true);
-		try {
-			field.set(targetObject, fieldValue);
-			return true;
-		} catch (IllegalAccessException e) {
-			return false;
-		}
-	}
-	//-----------------------Star definition here-------------------------//
-	@And("^valido_nome_response \"([^\"]*)\" \"([^\"]*)\" \"([^\"]*)\"$")
-	public void valido_nome_response(String endpoint, String nome,String id) throws Throwable {
-		String result =req.getNameUserTest(endpoint,nome,id);
-		Reporter.addStepLog(result);
-
-	}
+	//-----------------------Start API tests definition here-------------------------//
 	@And("^valido_endpoint \"([^\"]*)\"$")
 	public void valido_endpoint(String endpoint) throws Throwable {
 		req.valida_endpoint(endpoint);
-
-	}
-	@And("^valido_userId_response \"([^\"]*)\" \"([^\"]*)\"$")
-	public void valido_user_id_response(String endpoint, String id) throws Throwable {
-		String body =req.getField(id,endpoint,"id");
-		Reporter.addStepLog("Reponse:" +body);
-
-
 	}
 	@And("^deletar_user_ID \"([^\"]*)\" \"([^\"]*)\"$")
 	public void deletar_user_by_id(String endpoint, String iduser) throws Throwable {
@@ -245,14 +165,16 @@ public void altero_propriedade_dto(String nomePropriedade, Object valor) throws 
 	@Then("^valida registro existente \"([^\"]*)\" \"([^\"]*)\"$")
 	public void valida_nome_criado(String campo,String valor) throws Throwable {
 		req.validaRespostaApi(campo, valor);
-
 	}
+
+
+
+
 	@And("^update_registro_api_dataprovider \"([^\"]*)\" \"([^\"]*)\"$")
 	public void update_registro_api_dataprovider(String endpoint, String plan) throws Throwable {
 		//req.putUserFromDataProvider(endpoint,plan);
 
 	}
-
 	@Then("^valido_nome_response_dataprovider \"([^\"]*)\" \"([^\"]*)\" \"([^\"]*)\"$")
 	public void valido_nome_response_dataprovider(String endpoint ,String planilha,String nome) throws Throwable {
 		//req.validateUsersFromDataProvider(endpoint,planilha,nome);
@@ -263,8 +185,19 @@ public void altero_propriedade_dto(String nomePropriedade, Object valor) throws 
 		req.getPessoas(endpoint);
 
 	}
+	@And("^valido_nome_response \"([^\"]*)\" \"([^\"]*)\" \"([^\"]*)\"$")
+	public void valido_nome_response(String endpoint, String nome,String id) throws Throwable {
+		String result =req.getNameUserTest(endpoint,nome,id);
+		Reporter.addStepLog(result);
+
+	}
+	@And("^valido_userId_response \"([^\"]*)\" \"([^\"]*)\"$")
+	public void valido_user_id_response(String endpoint, String id) throws Throwable {
+		String body =req.getField(id,endpoint,"id");
+		Reporter.addStepLog("Reponse:" +body);
 
 
+	}
 	//-----------------------End definition here------------------------//
 
 }

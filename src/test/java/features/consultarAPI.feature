@@ -22,14 +22,14 @@ Feature: Enviar uma request para a API e validar os métodos de POST, GET, PUT, 
   @validacaoAplicacao @testeAPIPUT
   Scenario: Enviar uma Requisição para a API atualizando  um registro
     Given valido_endpoint "pessoa"
-    When update_registro_api "pessoa" "9"
-    Then valida registro existente "nome" "André Marinho"
+    When update_registro_api "pessoa" "41"
+    Then valida registro existente "nome" "André de Melo Marinho"
 
   @validacaoAplicacao @testeAPIDelete
   Scenario: Enviar uma Requisição para a API deletando um registro
     Given valido_endpoint "pessoa"
-    When  valida registro existente "id" "37"
-    Then deletar_user_ID "pessoa" "37"
+    When  valida registro existente "id" "41"
+    Then deletar_user_ID "pessoa" "41"
 
   @validacaoAplicacao @testeAPIGet
   Scenario: Enviar uma Requisição para a API retornando todos os dados

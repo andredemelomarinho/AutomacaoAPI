@@ -1,4 +1,4 @@
-Feature: Preencher o formulário de contato no site datum.inf.br
+Feature: Preencher o formulário de pesquisa google
 
   @preencherformulario @validarSubmit
   Scenario: Preencher e enviar formulário de pesquisa

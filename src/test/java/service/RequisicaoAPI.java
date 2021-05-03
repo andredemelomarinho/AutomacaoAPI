@@ -61,12 +61,11 @@ try {
 		String resposta= getField(respostaId,endpoint,campo);
 		assertEquals(valor, resposta);
 	}
-
-	public String  postUserTest(String endpoint , String nome){
+	public  void postUserTest(String endpoint , String nome){
 		//RestAssured Test\\
-       /*
-		SimuladorDTOBase baseDto = new SimuladorDTOBase();
-		UsuariosDTO dados =baseDto.getSimuladorBaseRealizado();
+/*
+		//SimuladorDTOBase baseDto = new SimuladorDTOBase();
+		//UsuariosDTO dados =baseDto.getSimuladorBaseRealizado();
 		JSONObject requestParams = new JSONObject();
 		RequestSpecification request = given();
 		dados.setNome("André de Melo Marinho");
@@ -77,7 +76,8 @@ try {
 		request.body(requestParams.toString());
 		Response post =request.post(url+endpoint+"/");
 		Reporter.addStepLog(post.prettyPrint());
-       */ 
+
+*/
 
 		SimuladorDTOBase baseDto = new SimuladorDTOBase();
 		UsuariosDTO dados =baseDto.getSimuladorBaseRealizado();
@@ -99,10 +99,9 @@ try {
 		respostaId = retorno.getJsonObject("id");
 		System.out.println("id "+respostaId+ " - nome "+respostaNome);
 
-		return respostaId;
+
 
 	}
-
 	public void putUserTest(String endpoint,String id){
 
 		String idUser= getField(id,endpoint,"id");
@@ -110,7 +109,7 @@ try {
 			Assert.fail("Id não encontrado");
 		}
 		// REST ASSURED \\
-
+/*
 		SimuladorDTOBase baseDto = new SimuladorDTOBase();
 		UsuariosDTO dados =baseDto.getSimuladorBaseRealizado();
 		JSONObject requestParams = new JSONObject();
@@ -125,9 +124,10 @@ try {
 		respostaNome= response.path("nome");
 		respostaId= response.path("id");
 		Reporter.addStepLog(response.prettyPrint());
+		*/
 
 
-/*
+
 		UsuariosDTO dados = new UsuariosDTO();
 		SimuladorDTOBase baseDto = new SimuladorDTOBase();
 		dados = baseDto.getSimuladorBaseRealizado();
@@ -147,7 +147,7 @@ try {
 						extract().
 						jsonPath();
 		Reporter.addStepLog(retorno.prettyPrint());
-*/
+
 	}
 	public void deleteUserTest(String endpoint ,String id){
 		String idUser= getField(id,endpoint,"id");
