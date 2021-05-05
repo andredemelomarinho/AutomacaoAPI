@@ -1,4 +1,4 @@
-# DesafioSicredi
+# DesafioRenner
  
 O Desafio foi realizado com JAVA, RestAssured, Cucumber e BDD.
 Os resultados de teste estão na pasta output, no arquivo report.html

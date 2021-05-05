@@ -31,27 +31,28 @@ import org.junit.Assert;
 public class RequisicaoAPI {
 
 
-	private String url ="https://604e13942a808e00177848a8.mockapi.io/api/cadastrar/";
+	private String url ="https://reqres.in/api/";
 	 String respostaId;
 	 String respostaNome;
-     String endpoint ="pessoa";
+     String endpoint ="users";
 	 CommonMethods cm = new CommonMethods();
 
 	 //TALK API COM RESTASSURED\\
 	public String getField (String iduser ,String endpoint,String field) {
-		String responseString="";
-try {
 
+	try {
+	String path =url + endpoint + "/" + iduser;
 
-	 responseString =
-			get(url + endpoint + "/" + iduser)
+		JsonPath responseString =
+			get(path)
 					.then()
 					//.statusCode(200)
 					.extract().
-					path(field);
-	return responseString;
-}catch (Exception ex ){
-	return null;
+					jsonPath();
+		Reporter.addStepLog(responseString.prettyPrint());
+		return responseString.getString("data."+field);
+}	catch (Exception ex ){
+		return null;
 }
 }
 	public void validaRespostaApi(String campo, String valor){
@@ -63,31 +64,34 @@ try {
 	}
 	public  void postUserTest(String endpoint , String nome){
 		//RestAssured Test\\
-/*
-		//SimuladorDTOBase baseDto = new SimuladorDTOBase();
-		//UsuariosDTO dados =baseDto.getSimuladorBaseRealizado();
-		JSONObject requestParams = new JSONObject();
-		RequestSpecification request = given();
-		dados.setNome("André de Melo Marinho");
-		requestParams.put("nome", dados.nome);
-		requestParams.put("cpf", dados.cpf);
-		requestParams.put("createdAt", dados.createdAt);
-		request.header("Content-Type", "application/json");
-		request.body(requestParams.toString());
-		Response post =request.post(url+endpoint+"/");
-		Reporter.addStepLog(post.prettyPrint());
-
-*/
 
 		SimuladorDTOBase baseDto = new SimuladorDTOBase();
 		UsuariosDTO dados =baseDto.getSimuladorBaseRealizado();
-		dados.setNome(nome);
+		JSONObject requestParams = new JSONObject();
+		RequestSpecification request = given();
+		requestParams.put("first_name", dados.first_name);
+		requestParams.put("id", dados.id);
+		requestParams.put("last_name", dados.last_name);
+		requestParams.put("email", dados.email);
+		requestParams.put("avatar",dados.avatar);
+		request.header("Content-Type", "application/json");
+		request.body(requestParams.toString());
+		Response post =request.post(url+endpoint+"/");
+		respostaId =post.path("id");
+		Reporter.addStepLog("Endpoint utilizado:" +url+endpoint+"/");
+		Reporter.addStepLog(post.prettyPrint());
+
+
+/*
+		SimuladorDTOBase baseDto = new SimuladorDTOBase();
+		UsuariosDTO dados =baseDto.getSimuladorBaseRealizado();
+		String path =url+endpoint+"/";
 		JsonPath retorno = given()
 				.header("Accept", "application/json")
 				.contentType("application/json")
 				.body(dados)
 				.when()
-				.post(url+endpoint+"/")
+				.post(path)
 				.andReturn()
 				.then()
 				.statusCode(201)
@@ -95,12 +99,13 @@ try {
 				.jsonPath();
 
 		Reporter.addStepLog("Reponse:" +retorno.prettyPrint());
-		respostaNome = retorno.getJsonObject("nome");
+		respostaNome = retorno.getJsonObject("first_name");
 		respostaId = retorno.getJsonObject("id");
 		System.out.println("id "+respostaId+ " - nome "+respostaNome);
+		System.out.println("URL: "+path);
 
 
-
+*/
 	}
 	public void putUserTest(String endpoint,String id){
 
@@ -131,8 +136,7 @@ try {
 		UsuariosDTO dados = new UsuariosDTO();
 		SimuladorDTOBase baseDto = new SimuladorDTOBase();
 		dados = baseDto.getSimuladorBaseRealizado();
-		dados.nome ="André Melo Marinho";
-		String path =urlSimulacoes +endpoint+ "/"+id;
+		String path =url +endpoint+ "/"+id;
 
 		JsonPath retorno =
 				given().
@@ -142,13 +146,33 @@ try {
 				put(path).
 				then().
 				statusCode(200).and().
-						body("nome",Matchers.is(dados.nome)).
+						body("nome",Matchers.is(dados.first_name)).
 						contentType("application/json").
 						extract().
 						jsonPath();
 		Reporter.addStepLog(retorno.prettyPrint());
 
 	}
+	public void patchUserTest(String endpoint,String id){
+		RestAssured.baseURI = "https://reqres.in/";
+		RestAssured.basePath = "api";
+					Response res =
+					given()
+							.header("Content-Type","application/json")
+							.body("{\n" +
+									"    \"name\": \"Andre Melo\",\n" +
+									"    \"job\": \"QA\"\n" +
+									"}")
+							.when()
+							.patch(endpoint+"/"+id)
+							.then()
+							.statusCode(200)
+							.extract().response();
+			Reporter.addStepLog(res.body().prettyPrint());
+	}
+
+
+
 	public void deleteUserTest(String endpoint ,String id){
 		String idUser= getField(id,endpoint,"id");
 		if(idUser.equals(id)){
@@ -180,286 +204,6 @@ try {
 		Reporter.addStepLog("Reponse:" +retorno.prettyPrint());
 		return retorno;
 	}
-
-////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-
-	private String urlSimulacoes = "https://604e13942a808e00177848a8.mockapi.io/api/cadastrar/";
-	public String  valida_endpoint_restricao(){
-		String responseString =get(urlSimulacoes).
-				then().
-				statusCode(200).
-				extract().
-				path("mensagem");
-
-		System.out.println(urlSimulacoes );
-		return responseString;
-	}
-	public void valida_endpoint_cpf(String cpf){
-				when().
-				get(url + cpf).
-				then().
-				statusCode(200).
-				extract();
-
-		System.out.println(url + cpf);
-
-	}
-	public void validaRestricaoCpf(String mensagem){
-		if(mensagem.contains("tem problema")){
-			Reporter.addStepLog("CPF com restrição");
-		}else{
-			Reporter.addStepLog("CPF sem  restrição");
-		}
-	}
-	public String getRestricaoByCPF (String cpf) {
-		String path =urlSimulacoes+cpf;
-		Reporter.addStepLog("Reponse:" +path);
-		String responseString =get(path).
-				then().
-				statusCode(200).
-				extract().
-				path("mensagem");
-
-		Assert.assertNotNull(responseString);
-		return responseString;
-	}
-	public String getCPFSimulacao(){
-	String path =urlSimulacoes;
-	Reporter.addStepLog("Reponse:" +path);
-	JsonPath retorno = given()
-			.header("Accept", "application/json")
-			.get(path)
-			.andReturn().jsonPath();
-
-	List<String> UsuariosDTO = retorno.getJsonObject("cpf");
-	String cpf =UsuariosDTO.get(0).toString();
-	return cpf;
-}
-	public Integer getIdSimulacao(){
-		List<String> simulacoes =getListSimulacao();
-		int registros =simulacoes.size();
-		String path =urlSimulacoes;
-		Reporter.addStepLog("Reponse:" +path);
-		JsonPath retorno = given()
-				.header("Accept", "application/json")
-				.get(path)
-				.andReturn().jsonPath();
-
-		List<Integer> UsuariosDTO = retorno.getJsonObject("id");
-		Integer id =UsuariosDTO.get(registros-1);
-		Reporter.addStepLog("id encontrado na simulação : "+id);
-		return id;
-	}
-	public String getSimulacaoByCPF(String cpf){
-		String path =urlSimulacoes+cpf;
-		Reporter.addStepLog("Reponse:" +path);
-		JsonPath retorno = given()
-				.header("Accept", "application/json")
-				.get(path)
-				.andReturn().jsonPath();
-		String cpfs = retorno.getJsonObject("cpf");
-		String nome = retorno.getJsonObject("nome");
-		Reporter.addStepLog("CPF encontrado : "+cpfs);
-		Reporter.addStepLog("Nome encontrado : "+nome);
-		return cpfs;
-	}
-	public List<String> getListSimulacao(){
-		String path =urlSimulacoes;
-		JsonPath retorno = given()
-				.header("Accept", "application/json")
-				.get(path)
-				.andReturn().jsonPath();
-				List<String> UsuariosDTO = retorno.getJsonObject("cpf");
-		return UsuariosDTO;
-	}
-	public void realiza_uma_simulacao_com_cpf_existente(String cpf){
-		RestAssured.baseURI = "http://localhost:8888/api/v1/";
-		UsuariosDTO dados = new UsuariosDTO();
-		SimuladorDTOBase baseDto = new SimuladorDTOBase();
-		dados = baseDto.getSimuladorBaseRealizado();
-		dados.cpf =cpf;
-
-		JsonPath retorno = given()
-				.header("Accept", "application/json")
-				.contentType("application/json")
-				.body(dados)
-				.expect()
-				.statusCode(409)
-				.when()
-				.post("/simulacoes")
-				.andReturn()
-				.jsonPath();
-
-	}
-	public void  postSimualacaoCpfIncorreto(String cpf){
-		RestAssured.baseURI = urlSimulacoes;
-		UsuariosDTO dados ;
-		SimuladorDTOBase baseDto = new SimuladorDTOBase();
-		dados = baseDto.getSimuladorBaseRealizado();
-		dados.cpf=cpf;
-		JsonPath retorno = given()
-				.header("Accept", "application/json")
-				.contentType("application/json")
-				.body(dados)
-				.expect()
-				.statusCode(409)
-				.when()
-				.post("/simulacoes")
-				.andReturn()
-				.jsonPath();
-		Reporter.addStepLog("Reponse:" +retorno.prettyPrint());
-		String resposta = retorno.getJsonObject("nome");
-		assertEquals(dados.nome, resposta);
-	}
-	public void  postSimualacaoDadosValidos(){
-		RestAssured.baseURI = "http://localhost:8888/api/v1/";
-		UsuariosDTO dados = new UsuariosDTO();
-		SimuladorDTOBase baseDto = new SimuladorDTOBase();
-		dados = baseDto.getSimuladorBaseRealizado();
-		JsonPath retorno = given()
-						.header("Accept", "application/json")
-						.contentType("application/json")
-						.body(dados)
-						//.expect()
-						//.statusCode(201)
-						.when()
-						.post("/simulacoes")
-						.andReturn()
-						.jsonPath();
-		Reporter.addStepLog("Reponse:" +retorno.prettyPrint());
-		UsuariosDTO resposta =  retorno.getJsonObject("nome");
-		assertEquals(dados.nome, resposta.getNome());
-
-
-
-	}
-	public void putUserTestCPF(String nome,String cpf){
-		UsuariosDTO dados = new UsuariosDTO();
-		SimuladorDTOBase baseDto = new SimuladorDTOBase();
-		dados = baseDto.getSimuladorBaseRealizado();
-		dados.nome =nome;
-		dados.cpf =cpf;
-		String path =urlSimulacoes +cpf;
-
-		JsonPath retorno =	given().
-					contentType("application/json").
-					body(dados).
-					when().
-					put(path).
-					then().
-					statusCode(200).and().
-					body("nome",Matchers.is(nome)).
-					contentType("application/json").
-					extract().
-					response().
-					jsonPath();
-					Reporter.addStepLog(retorno.prettyPrint());
-
-	}
-	public int getQuantidadeSimulacoes(List<String> simulacoes){
-		int registros=0;
-		if(!simulacoes.isEmpty()) {
-			registros = simulacoes.size();
-			for (String simulacao:simulacoes) {
-				Reporter.addStepLog("cpf : "+simulacao);
-			}
-			Reporter.addStepLog("Registros encontrados :" +simulacoes.size());
-		}else{
-			Reporter.addStepLog("Não foram encontrados simulações");
-			Assert.fail("Não foram encontrados simulações");
-		}
-
-		return registros;
-
-	}
-	public void validaUltmimaSimulacao(){
-		List<String> simulacoes =getListSimulacao();
-		int registros =simulacoes.size();
-		String path =urlSimulacoes;
-		Reporter.addStepLog("Reponse:" +path);
-		JsonPath retorno = given()
-				.header("Accept", "application/json")
-				.get(path)
-				.andReturn().jsonPath();
-
-		List<String> UsuariosDTO = retorno.getJsonObject("cpf");
-		String cpf =UsuariosDTO.get(registros-1).toString();
-		Reporter.addStepLog("CPF encontrado na simulação : "+cpf);
-	}
-	public void validaSimulacaoByCPF(String cpf){
-		List<String> simulacoes =getListSimulacao();
-		int registros =simulacoes.size();
-		String path =urlSimulacoes+cpf;
-		Reporter.addStepLog("Reponse:" +path);
-		JsonPath retorno = given()
-				.header("Accept", "application/json")
-				.expect()
-				.statusCode(200)
-				.when()
-				.get(path)
-				.andReturn().jsonPath();
-		String UsuariosDTO = retorno.getJsonObject("cpf");
-		String cpfs =UsuariosDTO;
-		Reporter.addStepLog("CPF encontrado na simulação : "+cpfs);
-	}
-	public void deleteUserTest(Integer id){
-					when().
-					delete(urlSimulacoes+id).
-					then().
-					statusCode(204);
-			Reporter.addStepLog(urlSimulacoes+id);
-
-	}
-	public void confirmIdDeletado(Integer id){
-		Reporter.addStepLog(urlSimulacoes+id);
-		when().
-				delete(urlSimulacoes+id).
-				then().
-				statusCode(404);
-
-	}
-	public void confirmCpfUpdated(String nome, String cpf){
-		String path =urlSimulacoes+cpf;
-		Reporter.addStepLog("Reponse:" +path);
-		JsonPath retorno = given()
-				.header("Accept", "application/json")
-				.expect()
-				.statusCode(200).and()
-				.body("nome",Matchers.is(nome))
-				.when()
-				.get(path)
-				.andReturn().jsonPath();
-		String UsuariosDTO = retorno.getJsonObject("nome");
-		  nome =UsuariosDTO;
-		  Reporter.addStepLog("Nome atualizado para : "+nome);
-
-	}
-	public void consultarRestricao(){
-		String path ="src/test/resources/Arquivos/restricao.json";
-
-		String arquivo =cm.lerArquivo(path);
-		JSONArray array = new JSONArray(arquivo);
-		int i = 0;
-		String cpf =array.getString(0);
-
-		while(i < array.length()){
-			cpf =array.getString(i);
-			String urli =urlSimulacoes+cpf;
-			Reporter.addStepLog("Reponse:" +urli);
-			String responseString =get(urli).
-					then().
-					statusCode(200).
-					extract().
-					path("mensagem");
-
-			Assert.assertNotNull(responseString);
-			i++;
-		}
-
-	}
 	public void valida_endpoint(String endpoint){
 		when().
 				get(url + endpoint).
@@ -469,45 +213,44 @@ try {
 
 	}
 	public String getNameUserTest(String endpoint, String name,String id){
-
-		String responseString =get(url + endpoint +"/"+id).
-				then().
-				body("name", equalTo(name))
+		String  path =url + endpoint +"/"+id;
+		String responseString =get(path).
+				then()
+				//.body("first_name", equalTo(name))
 				.extract()
-				.path("name");
-		System.out.println(url + endpoint);
+				.path("first_name");
+		Reporter.addStepLog("Reponse:" +responseString);
 		if(responseString.equals(name)){
 			return "Nome encontrado na API com sucesso:"+responseString;
 		}else {
 			return "Nome não encontrado na API:" + responseString;
 		}
 	}
-	public String getUserTest(String id ,String endpoint) {
+	public void GetUserName(String campo, String valor)	{
+		RestAssured.baseURI = "https://reqres.in/";
+		RestAssured.basePath = "api";
+		Response res = given()
+				.queryParam(campo,valor)
+				.when()
+				.get("/users/");
 
-		String responseString = get(url + endpoint + "/" + id).
-				then().
-				body("id", equalTo(id))
-				.extract()
-				.path("name");
-		System.out.println(url + endpoint);
-		if (responseString.equals(id)) {
-			return "Nome encontrado na API com sucesso:" + responseString;
-		} else {
-			return "Nome não encontrado na API:" + responseString;
-		}
+		JsonPath js = new JsonPath(res.asString());
 
+		//Retrieve name of user
+		String name = js.getString("data.first_name");
+		// Retrieve email of first user
+		String firstUserEmail = js.getString("data.email");
+		Reporter.addStepLog("User name is: "+name);
+		Reporter.addStepLog("User email is: "+firstUserEmail);
+
+	}
 
 	}
 
 
 
 
-	}
 
 
-
-
-	
-		
 
 

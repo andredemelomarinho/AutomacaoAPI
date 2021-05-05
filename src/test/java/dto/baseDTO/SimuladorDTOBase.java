@@ -18,9 +18,12 @@ public class SimuladorDTOBase {
 
 	public  UsuariosDTO getSimuladorBaseRealizado() {
 		UsuariosDTO simulador = new UsuariosDTO();
-		simulador.setCpf("00788639022");
-		simulador.setCreatedAt("14/03/2021");
-		simulador.setNome("Andre Marinho");
+		simulador.setId("14");
+		simulador.setFirst_name("Andre");
+		simulador.setLast_name("Marinho");
+		simulador.setEmail("andre@teste.com.br");
+		simulador.setAvatar("https://reqres.in/img/faces/12-image.jpg");
+
 		return simulador;
 	}
 	

@@ -4,6 +4,9 @@ import automation.Pages;
 import automation.ProjectBase;
 import automation.utils.ArquivoUtils;
 import cucumber.api.java.en.Given;
+import cucumber.api.java.en.When;
+import paginas.PaginaCompras;
+import paginas.PaginaLoginBase;
 import session.ThreadManager;
 import dto.SimuladorDTO;
 
@@ -31,11 +34,26 @@ public class LoginStepDefinition extends ProjectBase {
 		}
 	}
 
-	@Given("^acesso site para preencher formulario$")
-	public void acesso_site_para_preencher_formulario() throws Throwable {
+
+	@Given("^faco login no site http://automationpractice\\.com/$")
+	public void faco_login_no_site_http_automationpractice_com() throws Throwable {
 		setupTest("");
-		ArquivoUtils.tiraScreenshot("Pesquisa.jpg");
-		logger.info("Acessando Site Google ");
+		ArquivoUtils.tiraScreenshot("Login.jpg");
+		logger.info("Acessando Site http://automationpractice.com/ ");
+	}
+	@Given("^acesso pagina de cadstro$")
+	public void acesso_pagina_de_cadstro() throws Throwable {
+		setupTest("");
+		ArquivoUtils.tiraScreenshot("Login.jpg");
+		logger.info("Acessando Site http://automationpractice.com/ ");
+		getPages().get(PaginaLoginBase.class).acessoLogin();
+		getPages().get(PaginaLoginBase.class).enterRegister();
+
+	}
+	@When("^insiro login e senha pre existentes$")
+	public void insiro_login_e_senha_pre_existentes() throws Throwable {
+		getPages().get(PaginaLoginBase.class).acessoLogin();
+		getPages().get(PaginaLoginBase.class).loginSite();
 
 	}
 
